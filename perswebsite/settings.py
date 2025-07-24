@@ -17,7 +17,6 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -27,18 +26,20 @@ SECRET_KEY = os.getenv('SECRET_KEY', "django-insecure-t5ym%&y&v)qqel)vyt(495g$vc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
-# Updated ALLOWED_HOSTS for Railway deployment
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web-production-7840.up.railway.app']
-CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-7840.up.railway.app',
-    'http://web-production-7840.up.railway.app',
+# Updated ALLOWED_HOSTS for Render deployment
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'fyahaya.com',
+    'www.fyahaya.com',
+    'perswebsite.onrender.com'  # Replace with your actual Render subdomain
 ]
 
-if not DEBUG:
-    # Add Railway domain when deployed
-    RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL')
-    if RAILWAY_STATIC_URL:
-        ALLOWED_HOSTS.append(RAILWAY_STATIC_URL)
+CSRF_TRUSTED_ORIGINS = [
+    'https://fyahaya.com',
+    'https://www.fyahaya.com',
+    'https://perswebsite.onrender.com'  # Replace with your actual Render subdomain
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -54,7 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # Add WhiteNoise for static files
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # WhiteNoise for static files
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -68,8 +69,7 @@ ROOT_URLCONF = "perswebsite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -83,9 +83,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "perswebsite.wsgi.application"
 
-# Database configuration for Railway
+# Database configuration for Render
 if 'DATABASE_URL' in os.environ:
-    # Production database (Railway PostgreSQL)
+    # Production database (Render PostgreSQL)
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
@@ -137,7 +137,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# WhiteNoise static files configuration for Railway
+# WhiteNoise static files configuration for Render
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
