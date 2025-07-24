@@ -1,0 +1,4 @@
+# Add this to your requirements.txt or install manually:
+# pip install scholarly
+
+scholarly==1.7.11

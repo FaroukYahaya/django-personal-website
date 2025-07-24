@@ -1,0 +1,760 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Farouk Yahaya - Home{% endblock %}
+
+{% block extra_css %}
+/* CV Layout Styles */
+.cv-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cv-content {
+    min-width: 0; /* Prevents overflow */
+}
+
+.cv-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: #1a365d;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+}
+
+.cv-intro {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    color: #2d3748;
+}
+
+.cv-section {
+    margin-bottom: 48px;
+}
+
+.cv-section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1a365d;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+}
+
+/* Timeline Styles */
+.timeline {
+    position: relative;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+}
+
+.timeline-year {
+    font-weight: 600;
+    color: #1a365d;
+    min-width: 100px;
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-position {
+    font-size: 15px;
+    color: #2d3748;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.timeline-position em {
+    color: #2b6cb0;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.timeline-description {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.5;
+    margin-left: 16px;
+    font-style: italic;
+}
+
+/* Info Sidebar Styles */
+.info-sidebar {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+}
+
+/* Remove card styling - use same as biography sections */
+.info-sidebar .section {
+    margin-bottom: 48px;
+}
+
+.info-sidebar .section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a365d;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+    position: relative;
+}
+
+.info-sidebar .section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: #2b6cb0;
+    border-radius: 1px;
+}
+
+.info-sidebar .section p {
+    color: #2d3748;
+    margin-bottom: 16px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.social-links-simple {
+    margin-top: 8px;
+}
+
+.social-links-simple p {
+    margin-bottom: 8px;
+}
+
+.social-links-simple a {
+    color: #2b6cb0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.social-links-simple a:hover {
+    color: #1a365d;
+}
+
+/* Social Links with Icons */
+.social-links-with-icons {
+    margin-top: 8px;
+}
+
+.social-links-with-icons p {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.social-icon-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+}
+
+/* Email icon */
+.social-icon-text:not(.linkedin-icon):not(.scholar-icon):not(.orcid-icon):not(.rg-icon):not(.github-icon) {
+    background: #dc3545;
+}
+
+/* LinkedIn icon */
+.linkedin-icon {
+    background: #0077b5;
+    font-size: 12px;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+}
+
+/* Google Scholar icon */
+.scholar-icon {
+    background: #4285f4;
+    font-size: 16px;
+}
+
+/* ORCID icon */
+.orcid-icon {
+    background: #a6ce39;
+    font-size: 18px;
+}
+
+/* ResearchGate icon */
+.rg-icon {
+    background: #00d0b6;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* GitHub icon */
+.github-icon {
+    background: #333333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.social-links-with-icons a {
+    color: #2b6cb0;
+    text-decoration: none;
+    font-weight: 500;
+    flex: 1;
+}
+
+.social-links-with-icons a:hover {
+    color: #1a365d;
+}
+
+.social-links-with-icons p:hover .social-icon-text {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Contact Information Styles */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.contact-item:last-child {
+    border-bottom: none;
+}
+
+.contact-icon {
+    width: 20px;
+    height: 20px;
+    color: #2b6cb0;
+    flex-shrink: 0;
+}
+
+.contact-text {
+    flex: 1;
+}
+
+.contact-value {
+    color: #4a5568;
+    font-size: 15px;
+    margin: 0;
+}
+
+.contact-value a {
+    color: #2b6cb0;
+    text-decoration: none;
+}
+
+.contact-value a:hover {
+    color: #1a365d;
+}
+
+.social-links-horizontal {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 8px 0;
+}
+
+.social-link {
+    text-decoration: none;
+}
+
+/* Fixed News Slider Styles */
+.news-slider {
+    position: relative;
+    overflow: hidden;
+}
+
+.news-container {
+    position: relative;
+    height: 140px; /* Increased height to accommodate content properly */
+    overflow: hidden;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+}
+
+.news-track {
+    display: flex;
+    transition: transform 0.6s ease;
+    height: 100%;
+}
+
+.news-item {
+    min-width: 100%;
+    width: 100%; /* Ensure full width */
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Changed from center to flex-start for consistent top alignment */
+    align-items: flex-start;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    position: relative; /* Added for consistent positioning */
+}
+
+.news-date {
+    color: #2b6cb0;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 8px; /* Increased from 6px for better spacing */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative; /* Ensure consistent positioning */
+    top: 0;
+    left: 0;
+}
+
+.news-title {
+    font-weight: 600;
+    color: #1a365d;
+    font-size: 16px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    width: 100%;
+    /* Fixed height to prevent layout shifts caused by varying text lengths */
+    min-height: 42px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: block;
+}
+
+.news-title a:hover {
+    color: #2b6cb0;
+}
+
+.news-description {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+    width: 100%;
+    /* Fixed height for consistent layout */
+    min-height: 38px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.news-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #cbd5e0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.news-dot:hover,
+.news-dot.active {
+    background: #2b6cb0;
+    transform: scale(1.1);
+}
+
+/* Force text alignment for all news items */
+.news-item * {
+    text-align: left !important;
+}
+
+/* Responsive adjustments for news slider */
+@media screen and (max-width: 768px) {
+    .news-container {
+        height: 150px; /* Slightly increased for mobile */
+    }
+
+    .news-item {
+        padding: 12px 0;
+    }
+
+    .news-title {
+        font-size: 15px;
+        min-height: 45px; /* Adjusted for mobile font size */
+    }
+
+    .news-description {
+        font-size: 13px;
+        min-height: 35px; /* Adjusted for mobile font size */
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .cv-layout {
+        grid-template-columns: 1fr 280px;
+        gap: 32px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .cv-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .info-sidebar {
+        position: static;
+        order: -1; /* Show info above CV on mobile */
+    }
+
+    .timeline-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .timeline-year {
+        min-width: auto;
+        margin-bottom: 4px;
+    }
+
+    .timeline-description {
+        margin-left: 0;
+    }
+
+    .cv-title {
+        font-size: 1.8rem;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+}
+/* Biography Section Improvements */
+.biography-content {
+    font-size: 15px; /* Consistent with timeline and sidebar text */
+    line-height: 1.7; /* Improved readability */
+    color: #2d3748; /* Consistent with cv-intro color */
+    text-align: justify; /* Justified text alignment */
+    margin-bottom: 24px;
+}
+
+.biography-content p {
+    margin-bottom: 20px; /* Better paragraph spacing */
+    text-align: justify;
+    line-height: 1.7;
+}
+
+.biography-content p:last-child {
+    margin-bottom: 0; /* Remove bottom margin from last paragraph */
+}
+
+/* Ensure proper spacing for any lists in biography */
+.biography-content ul,
+.biography-content ol {
+    margin: 16px 0;
+    padding-left: 24px;
+}
+
+.biography-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+/* Style for any links within biography */
+.biography-content a {
+    color: #2b6cb0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.biography-content a:hover {
+    color: #1a365d;
+    text-decoration: underline;
+}
+
+/* Ensure section title consistency */
+.section h2 {
+    font-size: 1.4rem; /* Same as cv-section-title */
+    font-weight: 600;
+    color: #1a365d;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+}
+
+/* Reduce spacing between timeline items */
+.timeline-item {
+    margin-bottom: 16px; /* Reduced from 24px to 16px */
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0; /* Remove margin from last item */
+}
+
+{% endblock %}
+
+{% block content %}
+<!-- CV Layout with Two Columns -->
+<div class="cv-layout">
+    <!-- Left Column: Biography and Professional Timeline -->
+    <div class="cv-content">
+        <!-- Biography Section -->
+        <div class="section">
+            <h2>{{ home_content.biography_title }}</h2>
+            <div class="biography-content">
+                {{ home_content.biography_content|safe }}
+            </div>
+        </div>
+
+        <!-- Professional Timeline -->
+        {% if home_content.show_experience and experiences %}
+        <div class="cv-section">
+            <h2 class="cv-section-title">{{ home_content.experience_title }}</h2>
+            <div class="timeline">
+                {% for exp in experiences %}
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ exp.date_range }}:</div>
+                    <div class="timeline-content">
+                        <div class="timeline-position">{{ exp.position }}, <em>{{ exp.company }} – {{ exp.location }}</em></div>
+                        {% if exp.description %}
+                        <div class="timeline-description">{{ exp.description }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Education Section -->
+        {% if home_content.show_education and education %}
+        <div class="cv-section">
+            <h2 class="cv-section-title">{{ home_content.education_title }}</h2>
+            <div class="timeline">
+                {% for edu in education %}
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ edu.date_range }}:</div>
+                    <div class="timeline-content">
+                        <div class="timeline-position">{{ edu.degree }}, <em>{{ edu.institution }} – {{ edu.location }}</em></div>
+                        {% if edu.description %}
+                        <div class="timeline-description">{{ edu.description }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Latest News Section -->
+        {% if home_content.show_news and latest_posts %}
+        <div class="cv-section">
+            <h2 class="cv-section-title">{{ home_content.news_title }}</h2>
+            <div class="news-slider">
+                <div class="news-container">
+                    <div class="news-track" id="newsTrack">
+                        {% for post in latest_posts %}
+                        <div class="news-item">
+                            <div class="news-date">{{ post.created_at|date:"F j, Y" }}</div>
+                            <div class="news-title">
+                                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            </div>
+                            <div class="news-description">{{ post.excerpt|truncatechars:120 }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if latest_posts|length > 1 %}
+                <div class="news-controls">
+                    {% for post in latest_posts %}
+                    <button class="news-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div style="text-align: center; margin-top: 16px;">
+                <a href="{% url 'publications:posts' %}" style="color: #2b6cb0; font-size: 14px; font-weight: 500; text-decoration: none;">View All Posts →</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Column: Info & Socials (No Card Styling) -->
+    <div class="info-sidebar">
+        <div class="section">
+            <h2>Contact Information</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-value"><a href="mailto:{{ home_content.email }}">{{ home_content.email }}</a></div>
+                    </div>
+                </div>
+<!--
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-value"><a href="tel:{{ home_content.phone }}">{{ home_content.phone }}</a></div>
+                    </div>
+                </div> -->
+
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-value">{{ home_content.address|linebreaks }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>{{ home_content.research_interests_title }}</h2>
+            <p>{{ home_content.research_interests_content }}</p>
+        </div>
+
+        <div class="section">
+            <h2>Connect</h2>
+            <div class="social-links-horizontal">
+                {% if home_content.linkedin_url %}
+                <a href="{{ home_content.linkedin_url }}" class="social-link" target="_blank">
+                    <span class="social-icon-text linkedin-icon">in</span>
+                </a>
+                {% endif %}
+                {% if home_content.scholar_url %}
+                <a href="{{ home_content.scholar_url }}" class="social-link" target="_blank">
+                    <span class="social-icon-text scholar-icon">🎓</span>
+                </a>
+                {% endif %}
+                {% if home_content.orcid_url %}
+                <a href="{{ home_content.orcid_url }}" class="social-link" target="_blank">
+                    <span class="social-icon-text orcid-icon">⚬</span>
+                </a>
+                {% endif %}
+                {% if home_content.researchgate_url %}
+                <a href="{{ home_content.researchgate_url }}" class="social-link" target="_blank">
+                    <span class="social-icon-text rg-icon">RG</span>
+                </a>
+                {% endif %}
+                {% if home_content.github_url %}
+                <a href="{{ home_content.github_url }}" class="social-link" target="_blank">
+                    <span class="social-icon-text github-icon">⚡</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+
+    // News Slider Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const newsTrack = document.getElementById('newsTrack');
+    const newsDots = document.querySelectorAll('.news-dot');
+    const newsItems = document.querySelectorAll('.news-item');
+
+    if (!newsTrack || newsDots.length === 0 || newsItems.length <= 1) {
+        return; // Exit if no slider elements or only one item
+    }
+
+    let currentSlide = 0;
+    const totalSlides = newsItems.length;
+
+    // Function to update slider position
+    function updateSlider(slideIndex) {
+        // Move the track
+        const translateX = -(slideIndex * 100);
+        newsTrack.style.transform = `translateX(${translateX}%)`;
+
+        // Update active dot
+        newsDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === slideIndex);
+        });
+
+        currentSlide = slideIndex;
+    }
+
+    // Click handlers for dots are added below with auto-advance logic
+
+    // Auto-advance slider every 4 seconds
+    function autoAdvance() {
+        const nextSlide = (currentSlide + 1) % totalSlides;
+        updateSlider(nextSlide);
+    }
+
+    // Start auto-advance
+    let autoAdvanceInterval = setInterval(autoAdvance, 4000);
+
+    // Pause auto-advance on hover, resume on mouse leave
+    const newsContainer = document.querySelector('.news-container');
+    if (newsContainer) {
+        newsContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoAdvanceInterval);
+        });
+
+        newsContainer.addEventListener('mouseleave', () => {
+            autoAdvanceInterval = setInterval(autoAdvance, 4000);
+        });
+    }
+
+    // Also pause when user manually clicks a dot, then resume after 6 seconds
+    newsDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            clearInterval(autoAdvanceInterval);
+            updateSlider(index);
+            // Resume auto-advance after 6 seconds of user interaction
+            setTimeout(() => {
+                autoAdvanceInterval = setInterval(autoAdvance, 4000);
+            }, 6000);
+        });
+    });
+
+    // Optional: Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' && currentSlide > 0) {
+            updateSlider(currentSlide - 1);
+        } else if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+            updateSlider(currentSlide + 1);
+        }
+    });
+});
+    </script>
+{% endblock %}

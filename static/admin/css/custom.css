@@ -1,0 +1,174 @@
+/* static/admin/css/custom.css */
+
+/* Enhanced BibTeX textarea */
+#id_bibtex_entry {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    height: 200px;
+}
+
+#id_bibtex_entry:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Better fieldset styling */
+.form-row fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row fieldset legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Success/error message styling */
+.messagelist .success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.messagelist .error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+/* Publication list table enhancements */
+#result_list .field-get_title_display {
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+#result_list .field-get_citation_display {
+    text-align: center;
+}
+
+#result_list .field-get_featured_display {
+    text-align: center;
+}
+
+/* Action buttons */
+.actions select {
+    min-width: 200px;
+}
+
+/* Help text styling */
+.help {
+    font-size: 11px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* ===== NEW CODE SUPPORT STYLING ===== */
+
+/* Enhanced admin styling for code editor */
+.django-summernote-widget {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.note-editor {
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+}
+
+.note-toolbar {
+    background: #f8f9fa !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+.note-editing-area {
+    min-height: 400px;
+}
+
+/* Code block styling in the editor */
+.note-editable pre {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+    padding: 16px !important;
+    border-radius: 6px !important;
+    font-family: 'Fira Code', 'JetBrains Mono', Monaco, monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    overflow-x: auto !important;
+    margin: 16px 0 !important;
+}
+
+.note-editable code {
+    background: #f4f4f4 !important;
+    color: #c7254e !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    font-family: 'Fira Code', 'JetBrains Mono', Monaco, monospace !important;
+    font-size: 13px !important;
+}
+
+/* Admin form improvements */
+.form-row .field-content textarea {
+    min-height: 500px;
+}
+
+/* Custom button styling */
+.btn-code {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-code:hover {
+    background: #218838;
+}
+
+/* Admin preview styling */
+.admin-preview pre {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+/* Make the admin more mobile-friendly */
+@media (max-width: 768px) {
+    #id_bibtex_entry {
+        height: 150px;
+        font-size: 14px;
+    }
+
+    .form-row fieldset {
+        padding: 10px;
+    }
+
+    /* Code editor responsive fixes */
+    .note-editor {
+        font-size: 14px;
+    }
+
+    .note-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .note-editing-area {
+        min-height: 300px;
+    }
+}

@@ -1,0 +1,840 @@
+<!-- templates/publications.html -->
+{% extends 'base.html' %}
+
+{% block title %}Publications - Dr. Farouk Yahaya{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Override container to allow full width for scholar layout */
+    .container {
+        max-width: 1200px !important;
+        padding: 20px !important;
+    }
+
+    /* Scholar-specific styles */
+    .scholar-layout {
+        display: flex;
+        gap: 30px;
+        max-width: none;
+        margin: 0;
+    }
+
+    /* Left sidebar - statistics */
+    .sidebar {
+        width: 280px;
+        flex-shrink: 0;
+    }
+
+    .stats-box {
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        background: #fff;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #d9d9d9;
+        background: #f8f9fa;
+        border-radius: 4px 4px 0 0;
+    }
+
+    .stats-title {
+        font-size: 16px;
+        color: #222;
+        font-weight: 600;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .view-all {
+        color: #1a0dab;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .view-all:hover {
+        text-decoration: underline;
+    }
+
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .stats-table th {
+        background: #f8f9fa;
+        padding: 8px 12px;
+        text-align: left;
+        font-weight: 500;
+        color: #666;
+        border-bottom: 1px solid #d9d9d9;
+    }
+
+    .stats-table td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .metric-label {
+        color: #666;
+        font-weight: 400;
+    }
+
+    /* Chart */
+    .chart-container {
+        padding: 16px;
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+    }
+
+    /* Main content */
+    .main-content {
+        flex: 1;
+        min-width: 0;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    /* Publications header */
+    .publications-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #d9d9d9;
+        background: #f8f9fa;
+        margin: 0;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .header-checkbox {
+        width: 18px;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    .header-title {
+        flex: 1;
+        color: #1a0dab;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .header-cited {
+        width: 100px;
+        color: #1a0dab;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        cursor: pointer;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .header-year {
+        width: 80px;
+        color: #1a0dab;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        cursor: pointer;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    /* Publication rows */
+    .publication-row {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        min-height: 60px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .publication-row:hover {
+        background: #f8f9fa;
+    }
+
+    .row-checkbox {
+        width: 18px;
+        margin-right: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+    .row-title {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .pub-title-link {
+        color: #1a0dab;
+        text-decoration: none;
+        font-size: 16px;
+        line-height: 1.3;
+        display: block;
+        margin-bottom: 2px;
+        font-weight: 500;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .pub-title-link:hover {
+        text-decoration: underline;
+    }
+
+    .pub-title-link:visited {
+        color: #609;
+    }
+
+    .pub-authors {
+        color: #006621;
+        font-size: 13px;
+        line-height: 1.2;
+        margin-bottom: 1px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .pub-venue {
+        color: #666;
+        font-size: 13px;
+        line-height: 1.2;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .row-cited {
+        width: 100px;
+        text-align: center;
+        margin-right: 20px;
+    }
+
+    .cited-link {
+        color: #1a0dab;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .cited-link:hover {
+        text-decoration: underline;
+    }
+
+    .row-year {
+        width: 80px;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    /* Search */
+    .search-container {
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px 12px;
+        border: 1px solid #d9d9d9;
+        font-size: 14px;
+        outline: none;
+        border-radius: 4px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .search-input:focus {
+        border-color: #4285f4;
+        box-shadow: 0 0 2px rgba(66, 133, 244, 0.3);
+    }
+
+    /* Action buttons */
+    .pub-actions {
+        margin-top: 8px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+        border: 1px solid #d9d9d9;
+        background: #f8f9fa;
+        color: #1a0dab;
+        text-decoration: none;
+        border-radius: 2px;
+        cursor: pointer;
+        display: inline-block;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 500;
+    }
+
+    .action-btn:hover {
+        background: #e8f0fe;
+        border-color: #4285f4;
+        text-decoration: none;
+    }
+
+    .cite-btn {
+        background: #fff3cd;
+        border-color: #ffeaa7;
+        color: #856404;
+    }
+
+    .cite-btn:hover {
+        background: #fff3cd;
+        border-color: #ffd93d;
+    }
+
+    .pdf-btn {
+        background: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+    }
+
+    .pdf-btn:hover {
+        background: #b8daff;
+        border-color: #7abaff;
+    }
+
+    /* Citation modal */
+    .citation-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .citation-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 4px;
+        position: relative;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .citation-close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        right: 10px;
+        top: 5px;
+    }
+
+    .citation-close:hover {
+        color: black;
+    }
+
+    .citation-tabs {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 15px;
+    }
+
+    .citation-tab {
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .citation-tab.active {
+        background: white;
+        border-bottom: 1px solid white;
+        margin-bottom: -1px;
+    }
+
+    .citation-format {
+        display: none;
+        background: #f8f9fa;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+        margin-bottom: 15px;
+    }
+
+    .citation-format.active {
+        display: block;
+    }
+
+    .copy-btn {
+        background: #4285f4;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: 'Manrope', sans-serif;
+    }
+
+    .copy-btn:hover {
+        background: #3367d6;
+    }
+
+    @media (max-width: 768px) {
+        .scholar-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+        }
+
+        .publications-header, .publication-row {
+            padding: 8px;
+        }
+
+        .header-cited, .header-year, .row-cited, .row-year {
+            width: 60px;
+            font-size: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scholar-layout">
+    <!-- Left Sidebar - Statistics -->
+    <div class="sidebar">
+        <div class="stats-box">
+            <div class="stats-header">
+                <span class="stats-title">Cited by</span>
+                <a href="#" class="view-all">VIEW ALL</a>
+            </div>
+
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>All</th>
+                        <th>Since 2020</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="metric-label">Citations</td>
+                        <td>76</td>
+                        <td>55</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">h-index</td>
+                        <td>6</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-label">i10-index</td>
+                        <td>3</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="chart-container">
+                <canvas id="citationChart" width="240" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content - Publications -->
+    <div class="main-content">
+        <!-- Search -->
+        <div class="search-container" style="padding: 16px 16px 0 16px;">
+            <form method="get">
+                <input type="text"
+                       name="search"
+                       class="search-input"
+                       placeholder="Search articles"
+                       value="{{ search_query }}">
+            </form>
+        </div>
+
+        <!-- Publications Table Header -->
+        <div class="publications-header">
+            <input type="checkbox" class="header-checkbox" onchange="toggleAllCheckboxes(this)">
+            <div class="header-title">TITLE</div>
+            <div class="header-cited" onclick="sortBy('citations')">
+                CITED BY
+                {% if sort_by == 'citations' %}
+                    <span style="margin-left: 4px;">{% if sort_direction == 'desc' %}▼{% else %}▲{% endif %}</span>
+                {% endif %}
+            </div>
+            <div class="header-year" onclick="sortBy('year')">
+                YEAR
+                {% if sort_by == 'year' %}
+                    <span style="margin-left: 4px;">{% if sort_direction == 'desc' %}▼{% else %}▲{% endif %}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Publications List -->
+        {% if publications %}
+            {% for publication in publications %}
+            <div class="publication-row" data-pub-id="{{ publication.id }}">
+                <input type="checkbox" class="row-checkbox">
+
+                <div class="row-title">
+                    <a href="#" class="pub-title-link">{{ publication.title }}</a>
+                    {% if publication.authors %}
+                        <div class="pub-authors">{{ publication.authors }}</div>
+                    {% endif %}
+                    <div class="pub-venue">
+                        {% if publication.journal %}
+                            {{ publication.journal }}{% if publication.volume %} {{ publication.volume }}{% endif %}{% if publication.number %} ({{ publication.number }}){% endif %}{% if publication.pages %}, {{ publication.pages }}{% endif %}
+                        {% elif publication.booktitle %}
+                            {{ publication.booktitle }}
+                        {% elif publication.organization %}
+                            {{ publication.organization }}
+                        {% endif %}
+                        {% if publication.year %} - {{ publication.year }}{% endif %}
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="pub-actions">
+                        <button class="action-btn cite-btn"
+                                onclick="showCitation('{{ publication.title|escapejs }}', '{{ publication.authors|escapejs }}', '{{ publication.year|default:'' }}', '{{ publication.journal|escapejs }}', '{{ publication.booktitle|escapejs }}', '{{ publication.organization|escapejs }}', '{{ publication.volume|default:'' }}', '{{ publication.number|default:'' }}', '{{ publication.pages|default:'' }}', '{{ publication.publisher|default:'' }}')">
+                            Cite
+                        </button>
+                        {% if publication.url %}
+                            <a href="{{ publication.url }}" class="action-btn pdf-btn" target="_blank">PDF</a>
+                        {% elif publication.doi %}
+                            <a href="https://doi.org/{{ publication.doi }}" class="action-btn pdf-btn" target="_blank">PDF</a>
+                        {% else %}
+                            <button class="action-btn pdf-btn" onclick="searchForPDF('{{ publication.title|escapejs }}', {{ publication.year|default:'null' }})">Find PDF</button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row-cited">
+                    {% if publication.citation_count > 0 %}
+                        <a href="#" class="cited-link">{{ publication.citation_count }}</a>
+                    {% else %}
+                        <span style="color: #ccc;">0</span>
+                    {% endif %}
+                </div>
+
+                <div class="row-year">{{ publication.year|default:"" }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #666;">
+                No publications found.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Citation Modal -->
+<div id="citationModal" class="citation-modal">
+    <div class="citation-content">
+        <span class="citation-close">&times;</span>
+        <h3 style="margin-top: 0;">Cite this article</h3>
+
+        <div class="citation-tabs">
+            <div class="citation-tab active" onclick="showCitationFormat('apa')">APA</div>
+            <div class="citation-tab" onclick="showCitationFormat('mla')">MLA</div>
+            <div class="citation-tab" onclick="showCitationFormat('chicago')">Chicago</div>
+            <div class="citation-tab" onclick="showCitationFormat('bibtex')">BibTeX</div>
+        </div>
+
+        <div id="apa-format" class="citation-format active"></div>
+        <div id="mla-format" class="citation-format"></div>
+        <div id="chicago-format" class="citation-format"></div>
+        <div id="bibtex-format" class="citation-format"></div>
+
+        <button class="copy-btn" onclick="copyCitation()">Copy to clipboard</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                this.form.submit();
+            }
+        });
+    }
+
+    // Initialize chart
+    drawChart();
+
+    // Initialize checkbox functionality
+    initializeCheckboxes();
+});
+
+// Sorting functionality - FIXED to be globally accessible
+function sortBy(column) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSort = urlParams.get('sort');
+    const currentDirection = urlParams.get('direction');
+
+    if (currentSort === column) {
+        const newDirection = currentDirection === 'desc' ? 'asc' : 'desc';
+        urlParams.set('direction', newDirection);
+    } else {
+        urlParams.set('sort', column);
+        urlParams.set('direction', 'desc'); // Default to descending
+    }
+
+    // Preserve search query
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput && searchInput.value) {
+        urlParams.set('search', searchInput.value);
+    }
+
+    window.location.search = urlParams.toString();
+}
+
+// Citation functionality - FIXED to be globally accessible
+let currentPublication = null;
+
+function showCitation(title, authors, year, journal, booktitle, organization, volume, number, pages, publisher) {
+    currentPublication = {
+        title: title || '',
+        authors: authors || '',
+        year: year || '',
+        journal: journal || '',
+        booktitle: booktitle || '',
+        organization: organization || '',
+        volume: volume || '',
+        number: number || '',
+        pages: pages || '',
+        publisher: publisher || ''
+    };
+
+    generateCitations();
+    document.getElementById('citationModal').style.display = 'block';
+}
+
+function generateCitations() {
+    if (!currentPublication) return;
+
+    const { title, authors, year, journal, booktitle, organization, volume, number, pages, publisher } = currentPublication;
+
+    const venue = journal || booktitle || organization || '';
+    const firstAuthor = authors.split(',')[0]?.split(' ')[0]?.toLowerCase() || 'author';
+    const bibtexKey = `${firstAuthor}${year}`;
+
+    // APA format
+    let apa = `${authors}`;
+    if (year) apa += ` (${year}).`;
+    if (title) apa += ` ${title}.`;
+    if (venue) {
+        apa += ` ${venue}`;
+        if (volume) apa += `, ${volume}`;
+        if (number) apa += ` (${number})`;
+        if (pages) apa += `, ${pages}`;
+    }
+    apa += '.';
+
+    document.getElementById('apa-format').textContent = apa;
+
+    // MLA format
+    let mla = `${authors}.`;
+    if (title) mla += ` "${title}."`;
+    if (venue) {
+        mla += ` ${venue}`;
+        if (volume) mla += ` ${volume}`;
+        if (number) mla += ` (${number})`;
+    }
+    if (year) mla += ` (${year})`;
+    if (pages) mla += `: ${pages}`;
+    mla += '.';
+
+    document.getElementById('mla-format').textContent = mla;
+    document.getElementById('chicago-format').textContent = mla;
+
+    // BibTeX format
+    let bibtex = '';
+    if (journal) {
+        bibtex = `@article{${bibtexKey},\n`;
+    } else if (booktitle) {
+        bibtex = `@inproceedings{${bibtexKey},\n`;
+    } else if (organization) {
+        bibtex = `@phdthesis{${bibtexKey},\n`;
+    } else {
+        bibtex = `@misc{${bibtexKey},\n`;
+    }
+
+    if (title) bibtex += `  title={${title}},\n`;
+    if (authors) bibtex += `  author={${authors}},\n`;
+    if (journal) bibtex += `  journal={${journal}},\n`;
+    if (booktitle) bibtex += `  booktitle={${booktitle}},\n`;
+    if (organization) bibtex += `  school={${organization}},\n`;
+    if (volume) bibtex += `  volume={${volume}},\n`;
+    if (number) bibtex += `  number={${number}},\n`;
+    if (pages) bibtex += `  pages={${pages}},\n`;
+    if (year) bibtex += `  year={${year}},\n`;
+    if (publisher) bibtex += `  publisher={${publisher}},\n`;
+
+    bibtex += '}';
+
+    document.getElementById('bibtex-format').textContent = bibtex;
+}
+
+function showCitationFormat(format) {
+    document.querySelectorAll('.citation-format').forEach(f => {
+        f.classList.remove('active');
+    });
+    document.querySelectorAll('.citation-tab').forEach(t => {
+        t.classList.remove('active');
+    });
+
+    document.getElementById(format + '-format').classList.add('active');
+    event.target.classList.add('active');
+}
+
+function copyCitation() {
+    const activeFormat = document.querySelector('.citation-format.active');
+    if (activeFormat) {
+        navigator.clipboard.writeText(activeFormat.textContent).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.style.background = '#34a853';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#4285f4';
+            }, 2000);
+        });
+    }
+}
+
+function searchForPDF(title, year) {
+    const searches = [
+        `https://scholar.google.com/scholar?q="${encodeURIComponent(title)}"${year ? `+${year}` : ''}`,
+        `https://www.researchgate.net/search/publication?q=${encodeURIComponent(title)}`,
+        `https://arxiv.org/search/?query=${encodeURIComponent(title)}&searchtype=all`,
+        `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${encodeURIComponent(title)}`
+    ];
+
+    window.open(searches[0], '_blank');
+
+    if (confirm('PDF not found directly. Would you like to search on other platforms?')) {
+        searches.slice(1).forEach(url => window.open(url, '_blank'));
+    }
+}
+
+// Citation chart
+function drawChart() {
+    const canvas = document.getElementById('citationChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const years = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+    const citations = [1, 4, 8, 16, 12, 10, 8, 2];
+    const maxCitations = Math.max(...citations);
+
+    const barWidth = (width - 40) / years.length - 2;
+    const maxBarHeight = height - 20;
+
+    citations.forEach((count, index) => {
+        const x = 20 + index * (barWidth + 2);
+        const barHeight = (count / maxCitations) * maxBarHeight;
+        const y = height - barHeight - 10;
+
+        ctx.fillStyle = '#4285f4';
+        ctx.fillRect(x, y, barWidth, barHeight);
+
+        ctx.fillStyle = '#666';
+        ctx.font = '10px Manrope';
+        ctx.textAlign = 'center';
+        ctx.fillText(years[index], x + barWidth/2, height - 1);
+    });
+}
+
+// Checkbox functionality - FIXED to be globally accessible
+function toggleAllCheckboxes(headerCheckbox) {
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = headerCheckbox.checked;
+    });
+}
+
+function initializeCheckboxes() {
+    const headerCheckbox = document.querySelector('.header-checkbox');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+
+    if (!headerCheckbox || !rowCheckboxes.length) return;
+
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+            const totalCount = rowCheckboxes.length;
+
+            if (checkedCount === 0) {
+                headerCheckbox.indeterminate = false;
+                headerCheckbox.checked = false;
+            } else if (checkedCount === totalCount) {
+                headerCheckbox.indeterminate = false;
+                headerCheckbox.checked = true;
+            } else {
+                headerCheckbox.indeterminate = true;
+                headerCheckbox.checked = false;
+            }
+        });
+    });
+}
+
+// Close modal functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('citationModal');
+    const closeBtn = document.querySelector('.citation-close');
+
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+});
+{% endblock %}

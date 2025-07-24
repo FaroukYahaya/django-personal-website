@@ -1,0 +1,40 @@
+# INSTRUCTIONS: Add these fields and methods to your Publication model in myapp/models.py
+
+# 1. Add these imports at the top if not already present:
+from django.utils import timezone
+from datetime import timedelta
+
+# 2. Add these fields to your Publication class:
+class Publication(models.Model):
+    # ... your existing fields ...
+
+    # ADD THESE NEW FIELDS:
+    citation_count = models.IntegerField(default=0, help_text="Number of citations from Google Scholar")
+    last_citation_update = models.DateTimeField(null=True, blank=True, help_text="When citations were last updated")
+
+    # ... rest of your existing model code ...
+
+    # ADD THESE NEW METHODS:
+    def update_citations(self):
+        """Update citation count for this publication"""
+        from .utils import get_citations_for_publication
+
+        if self.title and self.authors:
+            try:
+                citation_count = get_citations_for_publication(self.title, self.authors)
+                self.citation_count = citation_count
+                self.last_citation_update = timezone.now()
+                self.save()
+                return citation_count
+            except Exception as e:
+                print(f"Error updating citations for {self.title}: {e}")
+                return self.citation_count
+        return 0
+
+    @property
+    def needs_citation_update(self):
+        """Check if citation count needs updating (older than 7 days)"""
+        if not self.last_citation_update:
+            return True
+
+        return timezone.now() - self.last_citation_update > timedelta(days=7)

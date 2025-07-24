@@ -1,0 +1,851 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Farouk Yahaya{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            color: #1a202c;
+            background: #fafafa;
+            font-size: 15px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: 'kern' 1, 'liga' 1;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 2rem;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 90px;
+            position: relative;
+        }
+
+        /* Left side: Photo + Name/Title */
+        .navbar-brand {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            padding-top: 4px;
+        }
+
+        .main-name {
+            font-size: 1.7em;
+            font-weight: 300;
+            color: #666;
+            margin: 0;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+
+        .main-subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            margin: 2px 0 0 0;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        /* Right side: Navigation Menu */
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            gap: 0;
+            margin: 0;
+            padding: 0;
+            align-items: flex-start;
+            padding-top: 4px;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            letter-spacing: -0.005em;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #2b6cb0;
+            background: rgba(43, 108, 176, 0.1);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #4a5568;
+            padding: 10px;
+            margin-top: -4px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .nav-toggle:hover {
+            background-color: rgba(43, 108, 176, 0.1);
+        }
+
+        .nav-toggle:focus {
+            outline: 2px solid #2b6cb0;
+            outline-offset: 2px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 100%;
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin: 0 auto;
+            padding-top: 48px;
+            padding-bottom: 48px;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 24px;
+            height: 2px;
+            background: #2b6cb0;
+            border-radius: 1px;
+        }
+
+        .section p {
+            color: #2d3748;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            font-size: 15px;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+            -ms-hyphens: auto;
+        }
+
+        /* Contact Information Styles */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            color: #2b6cb0;
+            flex-shrink: 0;
+        }
+
+        .contact-text {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .contact-value {
+            color: #4a5568;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .contact-value a {
+            color: #2b6cb0;
+            text-decoration: none;
+        }
+
+        .contact-value a:hover {
+            color: #1a365d;
+        }
+
+        /* Highlight text styling */
+        .highlight {
+            color: #2b6cb0;
+            font-weight: 500;
+        }
+
+        /* Latest News Slider */
+        .news-slider {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .news-slider h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+
+        .news-slider h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 24px;
+            height: 2px;
+            background: #2b6cb0;
+            border-radius: 1px;
+        }
+
+        .news-container {
+            position: relative;
+            height: 80px;
+            overflow: hidden;
+        }
+
+        .news-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .news-item {
+            min-width: 50%;
+            padding: 0 16px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .news-title {
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 16px;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .news-date {
+            color: #2b6cb0;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .news-description {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .news-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .news-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .news-dot.active {
+            background: #2b6cb0;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 48px;
+        }
+
+        .featured-article h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+            position: relative;
+        }
+
+        .featured-article h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 24px;
+            height: 2px;
+            background: #2b6cb0;
+            border-radius: 1px;
+        }
+
+        .featured-content {
+            display: flex;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .featured-image {
+            flex: 0 0 200px;
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .featured-text {
+            flex: 1;
+        }
+
+        .featured-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .featured-authors {
+            color: #2b6cb0;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .featured-description {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .featured-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #2b6cb0;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .featured-link:hover {
+            color: #1a365d;
+        }
+
+        .featured-link::after {
+            content: '→';
+            font-size: 12px;
+        }
+
+        /* Publication/News Items */
+        .publication-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            border-left: 3px solid #2b6cb0;
+            background: #ffffff;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .publication-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .publication-title {
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 15px;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .publication-venue {
+            color: #2b6cb0;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .publication-item p {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        /* Links */
+        a {
+            color: #2b6cb0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            color: #1a365d;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f7fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 32px 0;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            max-width: 100%;
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .social-links {
+            margin-bottom: 16px;
+        }
+
+        .social-links a {
+            color: #4a5568;
+            margin: 0 12px;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .social-links a:hover {
+            color: #1a202c;
+        }
+
+        /* Responsive breakpoints */
+        @media (min-width: 768px) {
+            .container, .nav-container, .footer-content {
+                max-width: 720px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container, .nav-container, .footer-content {
+                max-width: 960px;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .container, .nav-container, .footer-content {
+                max-width: 1140px;
+            }
+        }
+
+        /* ENHANCED: Mobile responsive styles with maximum specificity */
+        @media screen and (max-width: 768px) {
+            .nav-container {
+                min-height: 60px !important;
+                padding: 0 1rem !important;
+            }
+
+            .navbar-brand {
+                gap: 10px !important;
+            }
+
+            .profile-photo {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            /*
+            .main-name {
+                font-size: 1rem !important;
+            }
+            */
+            .main-subtitle {
+                font-size: 0.8rem !important;
+            }
+
+            .nav-toggle {
+                display: block !important;
+                position: relative !important;
+                z-index: 1002 !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .navbar-nav {
+                display: none !important;
+                position: absolute !important;
+                top: 100% !important;
+                left: 0 !important;
+                right: 0 !important;
+                background: #ffffff !important;
+                border-top: 1px solid #e2e8f0 !important;
+                flex-direction: column !important;
+                padding: 0 !important;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+                z-index: 1001 !important;
+                border-radius: 0 0 8px 8px !important;
+                list-style: none !important;
+                margin: 0 !important;
+            }
+
+            .navbar-nav.active {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .navbar-nav li {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .nav-link {
+                padding: 16px 24px !important;
+                border-bottom: 1px solid #f7fafc !important;
+                font-size: 16px !important;
+                width: 100% !important;
+                text-align: left !important;
+                display: block !important;
+            }
+
+            .navbar-nav li:last-child .nav-link {
+                border-bottom: none !important;
+            }
+
+            .container {
+                padding-top: 24px !important;
+                padding-bottom: 24px !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            .section {
+                margin-bottom: 32px !important;
+            }
+
+            .news-item {
+                min-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .featured-content {
+                flex-direction: column !important;
+                gap: 16px !important;
+                padding: 16px !important;
+            }
+
+            .featured-image {
+                flex: none !important;
+                height: 120px !important;
+            }
+        }
+
+        /* Typography refinements */
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.25;
+        }
+
+        p {
+            font-feature-settings: 'kern' 1;
+        }
+
+        /* Subtle hover states */
+        .section {
+            transition: all 0.1s ease;
+        }
+
+        /* Clean list styling */
+        ul, ol {
+            margin-bottom: 14px;
+            padding-left: 18px;
+        }
+
+        li {
+            margin-bottom: 4px;
+            font-size: 15px;
+            color: #2d3748;
+        }
+
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Left side: Photo + Name/Title -->
+            <a href="{% url 'publications:home' %}" class="navbar-brand">
+                <img class="profile-photo" src="{% static 'images/dp.jpg' %}" alt="Farouk Yahaya">
+                <div class="brand-text">
+                    <h1 class="main-name">Farouk Yahaya, PhD</h1>
+                    <p class="main-subtitle">AI/ML Research Engineer</p>
+                </div>
+            </a>
+
+            <!-- Right side: Navigation Menu -->
+            <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'publications:home' %}">Home</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'teaching' %}active{% endif %}" href="{% url 'publications:teaching' %}">Teaching</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'list' %}active{% endif %}" href="{% url 'publications:list' %}">Publications</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'posts' %}active{% endif %}" href="{% url 'publications:posts' %}">Posts</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        <!-- Sample content for demonstration -->
+        <div class="section">
+            <h2>About</h2>
+            <p>Welcome to my academic website. I am an AI/ML Research Engineer with expertise in machine learning, artificial intelligence, and computational research.</p>
+        </div>
+
+        <!-- Contact Information with Icons -->
+        <div class="section">
+            <h2>Contact Information</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-label">Email</div>
+                        <p class="contact-value"><a href="mailto:faroya2011@gmail.com">faroya2011@gmail.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-label">Mobile</div>
+                        <p class="contact-value"><a href="tel:+33666696919">+33 66 6 69 69 19</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <div class="contact-text">
+                        <div class="contact-label">Address</div>
+                        <p class="contact-value">21 Av. Neil Armstrong<br>33700 Mérignac, France</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="featured-article">
+            <div class="featured-content">
+                <h2>Latest Research</h2>
+                <div class="featured-image">Featured Publication</div>
+                <div class="featured-text">
+                    <h3 class="featured-title">Recent advances in machine learning applications</h3>
+                    <p class="featured-authors">Farouk Yahaya, et al.</p>
+                    <p class="featured-description">This research explores the latest developments in AI and machine learning, focusing on practical applications and theoretical foundations.</p>
+                    <a href="#" class="featured-link">Read more</a>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="mailto:your.email@example.com">Email</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Google Scholar</a>
+                <a href="#">ORCID</a>
+            </div>
+            <p>&copy; 2025 Farouk Yahaya</p>
+        </div>
+    </footer>
+
+    <!-- Navigation script - always loaded before any page-specific scripts -->
+    <script>
+        // NAVIGATION SCRIPT - ALWAYS LOADED
+        (function() {
+            'use strict';
+
+            // Wait for DOM to be ready
+            function initializeNavigation() {
+                const navToggle = document.querySelector('.nav-toggle');
+                const navMenu = document.getElementById('navbar-nav');
+                const navContainer = document.querySelector('.nav-container');
+
+                if (!navToggle || !navMenu || !navContainer) {
+                    console.error('Navigation elements not found');
+                    return;
+                }
+
+                console.log('Navigation elements found, initializing...');
+
+                // Toggle function
+                function toggleNav() {
+                    console.log('Toggle function called');
+                    navMenu.classList.toggle('active');
+                    console.log('Menu active state:', navMenu.classList.contains('active'));
+                }
+
+                // Add click event to toggle button
+                navToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Toggle button clicked');
+                    toggleNav();
+                });
+
+                // Close menu when clicking nav links
+                const navLinks = navMenu.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('active');
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!navContainer.contains(event.target)) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+
+                // Close menu on escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        navMenu.classList.remove('active');
+                    }
+                });
+
+                // Close menu on window resize to desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+
+                console.log('Navigation initialized successfully');
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeNavigation);
+            } else {
+                initializeNavigation();
+            }
+        })();
+    </script>
+
+    <!-- Page-specific scripts go here -->
+    <script>
+        {% block extra_js %}{% endblock %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+{% extends 'base.html' %}
+{% load teaching_filters %}
+
+{% block title %}{{ teaching_content.page_title }} - Farouk Yahaya{% endblock %}
+
+{% block extra_css %}
+/* Clean and Simple Teaching Page Styles */
+.teaching-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.teaching-header {
+    margin-bottom: 48px;
+}
+
+.teaching-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin-bottom: 16px;
+    padding-left: 8px;
+    border-left: 3px solid #2b6cb0;
+}
+
+.teaching-intro {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2d3748;
+    margin-bottom: 32px;
+}
+
+
+
+/* Simple Filters */
+.filters-section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 32px;
+}
+
+.filters-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a365d;
+    margin-bottom: 16px;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    color: #374151;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #2b6cb0;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-filter {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-apply {
+    background: #2b6cb0;
+    color: white;
+    border-color: #2b6cb0;
+}
+
+.btn-apply:hover {
+    background: #1a365d;
+}
+
+.btn-clear {
+    background: white;
+    color: #4a5568;
+}
+
+.btn-clear:hover {
+    background: #f9fafb;
+}
+
+.active-filters {
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #1e40af;
+    margin-top: 12px;
+}
+
+/* Academic Years - Simple Layout */
+.academic-years {
+    margin-bottom: 32px;
+}
+
+.year-section {
+    margin-bottom: 48px;
+}
+
+.year-header {
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.year-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1a365d;
+    margin: 0;
+}
+
+.year-stats {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.semester-section {
+    margin-bottom: 32px;
+}
+
+.semester-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin-bottom: 16px;
+    padding-left: 8px;
+    border-left: 3px solid #2b6cb0;
+}
+
+/* Simple Course Items */
+.course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.course-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+.course-item:hover {
+    border-color: #d1d5db;
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.course-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a365d;
+    flex: 1;
+}
+
+.course-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.course-credits {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.course-institution {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.course-description {
+    color: #4a5568;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.course-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.course-detail {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.course-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.tech-tag {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: #6b7280;
+}
+
+.empty-state-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .teaching-title {
+        font-size: 1.8rem;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .year-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .course-meta {
+        align-self: stretch;
+    }
+}
+{% endblock %}
+
+{% block content %}
+<div class="teaching-container">
+    <!-- Simple Teaching Header -->
+    <div class="teaching-header">
+        <h1 class="teaching-title">{{ teaching_content.page_title }}</h1>
+        <p class="teaching-intro">{{ teaching_content.introduction|safe }}</p>
+    </div>
+
+    <!-- Simple Filters -->
+    <div class="filters-section">
+        <h3 class="filters-title">Filter Courses</h3>
+
+        <form method="get" id="filterForm">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="yearFilter">Academic Year:</label>
+                    <select name="year" id="yearFilter">
+                        <option value="all" {% if selected_year == 'all' %}selected{% endif %}>All Years</option>
+                        {% for year in academic_years %}
+                        <option value="{{ year.id }}" {% if selected_year == year.id|stringformat:"s" %}selected{% endif %}>
+                            {{ year.year_display }} ({{ year.course_count }} course{{ year.course_count|pluralize }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="semesterFilter">Semester:</label>
+                    <select name="semester" id="semesterFilter">
+                        <option value="all" {% if selected_semester == 'all' %}selected{% endif %}>All Semesters</option>
+                        {% for semester in semesters %}
+                        <option value="{{ semester }}" {% if selected_semester == semester %}selected{% endif %}>
+                            {% if semester == '1' %}Semester 1
+                            {% elif semester == '2' %}Semester 2
+                            {% elif semester == 'full' %}Full Year
+                            {% elif semester == 'other' %}Other
+                            {% else %}{{ semester }}
+                            {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="institutionFilter">Institution:</label>
+                    <select name="institution" id="institutionFilter">
+                        <option value="all" {% if selected_institution == 'all' %}selected{% endif %}>All Institutions</option>
+                        {% for institution in institutions %}
+                        <option value="{{ institution }}" {% if selected_institution == institution %}selected{% endif %}>
+                            {{ institution }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter btn-apply">Apply Filters</button>
+                <a href="{% url 'publications:teaching' %}" class="btn-filter btn-clear">Clear All</a>
+            </div>
+
+            <!-- Active Filters -->
+            {% if selected_year != 'all' or selected_semester != 'all' or selected_institution != 'all' %}
+            <div class="active-filters">
+                🔍 Active filters:
+                {% if selected_year != 'all' %}
+                    {% for year in academic_years %}
+                        {% if year.id == selected_year|add:0 %}{{ year.year_display }}{% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if selected_semester != 'all' %}
+                    {% if selected_year != 'all' %} • {% endif %}
+                    {% if selected_semester == '1' %}Semester 1
+                    {% elif selected_semester == '2' %}Semester 2
+                    {% elif selected_semester == 'full' %}Full Year
+                    {% elif selected_semester == 'other' %}Other
+                    {% else %}{{ selected_semester }}
+                    {% endif %}
+                {% endif %}
+                {% if selected_institution != 'all' %}
+                    {% if selected_year != 'all' or selected_semester != 'all' %} • {% endif %}{{ selected_institution }}
+                {% endif %}
+            </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Academic Years and Courses -->
+    <div class="academic-years">
+        {% if courses_by_year %}
+            {% for year_id, year_data in courses_by_year.items %}
+            <div class="year-section">
+                <div class="year-header">
+                    <h2 class="year-title">{{ year_data.year.year_display }}</h2>
+                    <div class="year-stats">
+                        {{ year_data.year.courses.count }} course{{ year_data.year.courses.count|pluralize }}
+                    </div>
+                </div>
+
+                {% for semester, courses in year_data.semesters.items %}
+                <div class="semester-section">
+                    <h3 class="semester-title">
+                        {% if semester == '1' %}Semester 1
+                        {% elif semester == '2' %}Semester 2
+                        {% elif semester == 'full' %}Full Year
+                        {% elif semester == 'other' %}Other Courses
+                        {% else %}{{ semester }}
+                        {% endif %}
+                    </h3>
+
+                    <div class="course-list">
+                        {% for course in courses %}
+                        <div class="course-item">
+                            <div class="course-header">
+                                <div class="course-title">{{ course.title }}</div>
+                                <div class="course-meta">
+                                    {% if course.credits %}
+                                    <span class="course-credits">{{ course.credits }}</span>
+                                    {% endif %}
+                                    <span class="course-institution">{{ course.institution_display }}</span>
+                                </div>
+                            </div>
+
+                            {% if course.description %}
+                            <p class="course-description">
+                                {{ course.description }}
+                                {% if course.co_teachers %}
+                                <em>(co-taught with {{ course.co_teachers }})</em>
+                                {% endif %}
+                            </p>
+                            {% endif %}
+
+                            {% if course.student_count or course.total_hours or course.hours_per_week %}
+                            <div class="course-details">
+                                {% if course.student_count %}
+                                <div class="course-detail">
+                                    👥 {{ course.student_count }} students
+                                </div>
+                                {% endif %}
+                                {% if course.total_hours %}
+                                <div class="course-detail">
+                                    ⏰ {{ course.total_hours }}h total
+                                </div>
+                                {% endif %}
+                                {% if course.hours_per_week %}
+                                <div class="course-detail">
+                                    📅 {{ course.hours_per_week }}h/week
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                            {% if course.technologies_used %}
+                            <div class="course-technologies">
+                                {% for tech in course.technologies_used|split:"," %}
+                                <span class="tech-tag">{{ tech|trim }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-state-icon">📚</div>
+                <h3>No courses found</h3>
+                <p>Try adjusting your filters or add some courses through the admin panel.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Simple auto-submit on filter change
+document.addEventListener('DOMContentLoaded', function() {
+    const filterSelects = document.querySelectorAll('#filterForm select');
+
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    });
+});
+</script>
+{% endblock %}
