@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'fyahaya.com',
     'www.fyahaya.com',
-    'fyahaya.onrender.com'  # Replace with your actual Render subdomain
+    'fyahaya.onrender.com'  # Replace with your actual Render
 ]
 
 CSRF_TRUSTED_ORIGINS = [
