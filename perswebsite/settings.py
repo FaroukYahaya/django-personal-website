@@ -32,13 +32,13 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'fyahaya.com',
     'www.fyahaya.com',
-    'perswebsite.onrender.com'  # Replace with your actual Render subdomain
+    'fyahaya.onrender.com'  # Replace with your actual Render subdomain
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://fyahaya.com',
     'https://www.fyahaya.com',
-    'https://perswebsite.onrender.com'  # Replace with your actual Render subdomain
+    'https://fyahaya.onrender.com'  # Replace with your actual Render subdomain
 ]
 
 # Application definition
