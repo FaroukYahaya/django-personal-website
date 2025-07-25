@@ -1,1 +1,1 @@
-web: gunicorn perswebsite.wsgi
+web: gunicorn perswebsite.wsgi:application
