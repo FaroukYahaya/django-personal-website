@@ -10,8 +10,8 @@ python manage.py makemigrations --noinput
 echo "Applying migrations..."
 python manage.py migrate --noinput
 
-echo "Loading initial data (safe to run multiple times)..."
-python manage.py loaddata data.json || echo "Data already exists or failed to load"
+echo "Loading initial data..."
+python manage.py loaddata working_data.json || echo "Data already exists or failed to load"
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
